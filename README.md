@@ -1,9 +1,9 @@
 # Project Camp Backend — Product Requirements Document (PRD)
 
-| | |
-|---|---|
-| **Product Name** | Project Camp Backend |
-| **Version** | 1.0.0 |
+|                  |                                           |
+| ---------------- | ----------------------------------------- |
+| **Product Name** | Project Camp Backend                      |
+| **Version**      | 1.0.0                                     |
 | **Product Type** | Backend API for Project Management System |
 
 ---
@@ -33,11 +33,11 @@ Project Camp Backend is a RESTful API service designed to support collaborative 
 
 ## 2. Target Users
 
-| User Type | Description |
-|---|---|
+| User Type                  | Description                                                              |
+| -------------------------- | ------------------------------------------------------------------------ |
 | **Project Administrators** | Create and manage projects, assign roles, oversee all project activities |
-| **Project Admins** | Manage tasks and project content within assigned projects |
-| **Team Members** | View projects, update task completion status, access project information |
+| **Project Admins**         | Manage tasks and project content within assigned projects                |
+| **Team Members**           | View projects, update task completion status, access project information |
 
 ---
 
@@ -57,15 +57,15 @@ Project Camp Backend is a RESTful API service designed to support collaborative 
 - **Project Creation** — Create new projects with name and description
 - **Project Listing** — View all projects user has access to, with member count
 - **Project Details** — Access individual project information
-- **Project Updates** — Modify project information *(Admin only)*
-- **Project Deletion** — Remove projects *(Admin only)*
+- **Project Updates** — Modify project information _(Admin only)_
+- **Project Deletion** — Remove projects _(Admin only)_
 
 ### 3.3 Team Member Management
 
 - **Member Addition** — Invite users to projects via email
 - **Member Listing** — View all project team members
-- **Role Management** — Update member roles within projects *(Admin only)*
-- **Member Removal** — Remove team members from projects *(Admin only)*
+- **Role Management** — Update member roles within projects _(Admin only)_
+- **Member Removal** — Remove team members from projects _(Admin only)_
 
 ### 3.4 Task Management
 
@@ -82,16 +82,16 @@ Project Camp Backend is a RESTful API service designed to support collaborative 
 
 - **Subtask Creation** — Add subtasks to existing tasks
 - **Subtask Updates** — Modify subtask details and completion status
-- **Subtask Deletion** — Remove subtasks *(Admin/Project Admin only)*
+- **Subtask Deletion** — Remove subtasks _(Admin/Project Admin only)_
 - **Member Completion** — Allow members to mark subtasks as complete
 
 ### 3.6 Project Notes
 
-- **Note Creation** — Add notes to projects *(Admin only)*
+- **Note Creation** — Add notes to projects _(Admin only)_
 - **Note Listing** — View all project notes
 - **Note Details** — Access individual note content
-- **Note Updates** — Modify existing notes *(Admin only)*
-- **Note Deletion** — Remove notes *(Admin only)*
+- **Note Updates** — Modify existing notes _(Admin only)_
+- **Note Deletion** — Remove notes _(Admin only)_
 
 ### 3.7 System Health
 
@@ -105,77 +105,77 @@ Project Camp Backend is a RESTful API service designed to support collaborative 
 
 #### Authentication Routes — `/api/v1/auth/`
 
-| Method | Endpoint | Description | Access |
-|---|---|---|---|
-| POST | `/register` | User registration | Public |
-| POST | `/login` | User authentication | Public |
-| POST | `/logout` | User logout | Secured |
-| GET | `/current-user` | Get current user info | Secured |
-| POST | `/change-password` | Change user password | Secured |
-| POST | `/refresh-token` | Refresh access token | Public |
-| GET | `/verify-email/:verificationToken` | Email verification | Public |
-| POST | `/forgot-password` | Request password reset | Public |
-| POST | `/reset-password/:resetToken` | Reset forgotten password | Public |
-| POST | `/resend-email-verification` | Resend verification email | Secured |
+| Method | Endpoint                           | Description               | Access  |
+| ------ | ---------------------------------- | ------------------------- | ------- |
+| POST   | `/register`                        | User registration         | Public  |
+| POST   | `/login`                           | User authentication       | Public  |
+| POST   | `/logout`                          | User logout               | Secured |
+| GET    | `/current-user`                    | Get current user info     | Secured |
+| POST   | `/change-password`                 | Change user password      | Secured |
+| POST   | `/refresh-token`                   | Refresh access token      | Public  |
+| GET    | `/verify-email/:verificationToken` | Email verification        | Public  |
+| POST   | `/forgot-password`                 | Request password reset    | Public  |
+| POST   | `/reset-password/:resetToken`      | Reset forgotten password  | Public  |
+| POST   | `/resend-email-verification`       | Resend verification email | Secured |
 
 #### Project Routes — `/api/v1/projects/`
 
-| Method | Endpoint | Description | Access |
-|---|---|---|---|
-| GET | `/` | List user projects | Secured |
-| POST | `/` | Create project | Secured |
-| GET | `/:projectId` | Get project details | Secured, role-based |
-| PUT | `/:projectId` | Update project | Secured, Admin only |
-| DELETE | `/:projectId` | Delete project | Secured, Admin only |
-| GET | `/:projectId/members` | List project members | Secured |
-| POST | `/:projectId/members` | Add project member | Secured, Admin only |
-| PUT | `/:projectId/members/:userId` | Update member role | Secured, Admin only |
-| DELETE | `/:projectId/members/:userId` | Remove member | Secured, Admin only |
+| Method | Endpoint                      | Description          | Access              |
+| ------ | ----------------------------- | -------------------- | ------------------- |
+| GET    | `/`                           | List user projects   | Secured             |
+| POST   | `/`                           | Create project       | Secured             |
+| GET    | `/:projectId`                 | Get project details  | Secured, role-based |
+| PUT    | `/:projectId`                 | Update project       | Secured, Admin only |
+| DELETE | `/:projectId`                 | Delete project       | Secured, Admin only |
+| GET    | `/:projectId/members`         | List project members | Secured             |
+| POST   | `/:projectId/members`         | Add project member   | Secured, Admin only |
+| PUT    | `/:projectId/members/:userId` | Update member role   | Secured, Admin only |
+| DELETE | `/:projectId/members/:userId` | Remove member        | Secured, Admin only |
 
 #### Task Routes — `/api/v1/tasks/`
 
-| Method | Endpoint | Description | Access |
-|---|---|---|---|
-| GET | `/:projectId` | List project tasks | Secured, role-based |
-| POST | `/:projectId` | Create task | Secured, Admin/Project Admin |
-| GET | `/:projectId/t/:taskId` | Get task details | Secured, role-based |
-| PUT | `/:projectId/t/:taskId` | Update task | Secured, Admin/Project Admin |
-| DELETE | `/:projectId/t/:taskId` | Delete task | Secured, Admin/Project Admin |
-| POST | `/:projectId/t/:taskId/subtasks` | Create subtask | Secured, Admin/Project Admin |
-| PUT | `/:projectId/st/:subTaskId` | Update subtask | Secured, role-based |
-| DELETE | `/:projectId/st/:subTaskId` | Delete subtask | Secured, Admin/Project Admin |
+| Method | Endpoint                         | Description        | Access                       |
+| ------ | -------------------------------- | ------------------ | ---------------------------- |
+| GET    | `/:projectId`                    | List project tasks | Secured, role-based          |
+| POST   | `/:projectId`                    | Create task        | Secured, Admin/Project Admin |
+| GET    | `/:projectId/t/:taskId`          | Get task details   | Secured, role-based          |
+| PUT    | `/:projectId/t/:taskId`          | Update task        | Secured, Admin/Project Admin |
+| DELETE | `/:projectId/t/:taskId`          | Delete task        | Secured, Admin/Project Admin |
+| POST   | `/:projectId/t/:taskId/subtasks` | Create subtask     | Secured, Admin/Project Admin |
+| PUT    | `/:projectId/st/:subTaskId`      | Update subtask     | Secured, role-based          |
+| DELETE | `/:projectId/st/:subTaskId`      | Delete subtask     | Secured, Admin/Project Admin |
 
 #### Note Routes — `/api/v1/notes/`
 
-| Method | Endpoint | Description | Access |
-|---|---|---|---|
-| GET | `/:projectId` | List project notes | Secured, role-based |
-| POST | `/:projectId` | Create note | Secured, Admin only |
-| GET | `/:projectId/n/:noteId` | Get note details | Secured, role-based |
-| PUT | `/:projectId/n/:noteId` | Update note | Secured, Admin only |
-| DELETE | `/:projectId/n/:noteId` | Delete note | Secured, Admin only |
+| Method | Endpoint                | Description        | Access              |
+| ------ | ----------------------- | ------------------ | ------------------- |
+| GET    | `/:projectId`           | List project notes | Secured, role-based |
+| POST   | `/:projectId`           | Create note        | Secured, Admin only |
+| GET    | `/:projectId/n/:noteId` | Get note details   | Secured, role-based |
+| PUT    | `/:projectId/n/:noteId` | Update note        | Secured, Admin only |
+| DELETE | `/:projectId/n/:noteId` | Delete note        | Secured, Admin only |
 
 #### Health Check — `/api/v1/healthcheck/`
 
-| Method | Endpoint | Description | Access |
-|---|---|---|---|
-| GET | `/` | System health status | Public |
+| Method | Endpoint | Description          | Access |
+| ------ | -------- | -------------------- | ------ |
+| GET    | `/`      | System health status | Public |
 
 ---
 
 ### 4.2 Permission Matrix
 
-| Feature | Admin | Project Admin | Member |
-|---|:---:|:---:|:---:|
-| Create Project | ✓ | ✗ | ✗ |
-| Update/Delete Project | ✓ | ✗ | ✗ |
-| Manage Project Members | ✓ | ✗ | ✗ |
-| Create/Update/Delete Tasks | ✓ | ✓ | ✗ |
-| View Tasks | ✓ | ✓ | ✓ |
-| Update Subtask Status | ✓ | ✓ | ✓ |
-| Create/Delete Subtasks | ✓ | ✓ | ✗ |
-| Create/Update/Delete Notes | ✓ | ✗ | ✗ |
-| View Notes | ✓ | ✓ | ✓ |
+| Feature                    | Admin | Project Admin | Member |
+| -------------------------- | :---: | :-----------: | :----: |
+| Create Project             |   ✓   |       ✗       |   ✗    |
+| Update/Delete Project      |   ✓   |       ✗       |   ✗    |
+| Manage Project Members     |   ✓   |       ✗       |   ✗    |
+| Create/Update/Delete Tasks |   ✓   |       ✓       |   ✗    |
+| View Tasks                 |   ✓   |       ✓       |   ✓    |
+| Update Subtask Status      |   ✓   |       ✓       |   ✓    |
+| Create/Delete Subtasks     |   ✓   |       ✓       |   ✗    |
+| Create/Update/Delete Notes |   ✓   |       ✗       |   ✗    |
+| View Notes                 |   ✓   |       ✓       |   ✓    |
 
 ---
 
@@ -183,19 +183,19 @@ Project Camp Backend is a RESTful API service designed to support collaborative 
 
 **User Roles**
 
-| Role | Description |
-|---|---|
-| `admin` | Full system access |
+| Role            | Description                         |
+| --------------- | ----------------------------------- |
+| `admin`         | Full system access                  |
 | `project_admin` | Project-level administrative access |
-| `member` | Basic project member access |
+| `member`        | Basic project member access         |
 
 **Task Status**
 
-| Status | Description |
-|---|---|
-| `todo` | Task not started |
+| Status        | Description                    |
+| ------------- | ------------------------------ |
+| `todo`        | Task not started               |
 | `in_progress` | Task currently being worked on |
-| `done` | Task completed |
+| `done`        | Task completed                 |
 
 ---
 

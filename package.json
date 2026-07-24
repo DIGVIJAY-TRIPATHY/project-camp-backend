@@ -1,0 +1,24 @@
+{
+  "name": "project-camp-backend",
+  "version": "1.0.0",
+  "description": "a project management app",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DIGVIJAY-TRIPATHY/project-camp-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DIGVIJAY-TRIPATHY/project-camp-backend/issues"
+  },
+  "homepage": "https://github.com/DIGVIJAY-TRIPATHY/project-camp-backend#readme",
+  "devDependencies": {
+    "prettier": "3.9.6"
+  }
+}
