@@ -18,6 +18,14 @@ app.use(
 
 app.use(express.static("public"));
 
+
+
+
+import healthcheckRouter from "./routes/healthcheck.routes.js";
+
+
+app.use("/api/v1/healthcheck",healthcheckRouter)
+
 app.use(
     cors({
         origin: process.env.CORS_ORIGIN?.split(",") || "http://localhost:5173",
