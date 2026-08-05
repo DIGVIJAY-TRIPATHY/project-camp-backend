@@ -36,6 +36,7 @@ const sendEmail = async (options) => {
 
     try {
         await transporter.sendMail(mail);
+        console.log(`Email sent to ${options.email} with subject: ${options.subject}`);
     } catch (error) {
         console.error("Error sending email:", error);
         throw error;

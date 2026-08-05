@@ -3,6 +3,7 @@ import { ApiResponse } from "../utils/apiResponse.js";
 import { ApiError } from "../utils/apiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import {sendEmail} from "../utils/mail.js";
+import {emailVerificationMailgenContent} from "../utils/mail.js";
 
 
 const generateAccessAndRefreshTokens = async(userId) => {
@@ -22,7 +23,7 @@ const generateAccessAndRefreshTokens = async(userId) => {
 
 
 const registerUser = asyncHandler(async (req, res) => {
-    const { fullname, email, password, role } = req.body;
+    const { username, email, password, role } = req.body;
 
     const existedUser = await User.findOne({
         $or: [{ email }, { username }],
@@ -35,7 +36,7 @@ const registerUser = asyncHandler(async (req, res) => {
     const user = await User.create({
         email,
         password,
-        fullname,
+        username,
         isEmailVerified: false,
     });
 
