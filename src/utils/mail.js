@@ -1,4 +1,46 @@
 import Mailgen from "mailgen";
+import nodemailer from "nodemailer";
+
+const sendEmail = async (options) => {
+    const mailGenerator = new Mailgen({
+        theme: "default",
+        product: {
+            name: "Project Camp",
+            link: "https://projectcamp.com/",
+        },
+    });
+
+    const emailTextual = mailGenerator.generatePlaintext(
+        options.mailgenContent,
+    );
+
+    const emailHtml = mailGenerator.generate(options.mailgenContent);
+
+    const transporter = nodemailer.createTransport({
+        host: process.env.MAILTRAP_SMTP_HOST,
+        port: process.env.MAILTRAP_SMTP_PORT,
+        secure: false,
+        auth: {
+            user: process.env.MAILTRAP_SMTP_USER,
+            pass: process.env.MAILTRAP_SMTP_PASS,
+        },
+    });
+
+    const mail = {
+        from: "Project Camp <no-reply@projectcamp.com>",
+        to: options.email,
+        subject: options.subject,
+        text: emailTextual,
+        html: emailHtml,
+    };
+
+    try {
+        await transporter.sendMail(mail);
+    } catch (error) {
+        console.error("Error sending email:", error);
+        throw error;
+    }
+};
 
 const emailVerificationMailgenContent = (username, verificationUrl) => {
     return {
@@ -38,8 +80,8 @@ const forgotPasswordMailgenContent = (username, passwordResetUrl) => {
     };
 };
 
-
 export {
     emailVerificationMailgenContent,
     forgotPasswordMailgenContent,
-}
+    sendEmail,
+};
