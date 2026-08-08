@@ -5,6 +5,8 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { sendEmail } from "../utils/mail.js";
 import { emailVerificationMailgenContent } from "../utils/mail.js";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
+import { forgotPasswordMailgenContent } from "../utils/mail.js";
 
 const generateAccessAndRefreshTokens = async (userId) => {
     try {
