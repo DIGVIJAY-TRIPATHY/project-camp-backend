@@ -3,7 +3,7 @@ import { ApiResponse } from "../utils/apiResponse.js";
 import { ApiError } from "../utils/apiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { sendEmail } from "../utils/mail.js";
-import { emailVerificationMailgenContent } from "../utils/mail.js";
+import { emailVerificationMailgenContent, forgotPasswordMailgenContent, sendEmail } from "../utils/mail.js";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import { forgotPasswordMailgenContent } from "../utils/mail.js";
