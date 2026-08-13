@@ -8,25 +8,27 @@ import {
     getProjectById,
     getProjectMembers,
     updateMemberRole,
-    updateProject
+    updateProject,
 } from "../controllers/project.controller.js";
 import { validate } from "../middlewares/validator.middleware.js";
 import {
     createProjectValidator,
-    addMemberToProjectValidator
+    addMemberToProjectValidator,
 } from "../validators/index.js";
-import { verifyJWT, validateProjectPermission } from "../middlewares/auth.middleware.js";
+import {
+    verifyJWT,
+    validateProjectPermission,
+} from "../middlewares/auth.middleware.js";
 import { AvailableUserRole, UserRolesEnum } from "../utils/constants.js";
-import { ProjectMember } from "../models/projectmember.model.js";
 
 const router = Router();
 
-route.use(verifyJWT)
+router.use(verifyJWT);
 
 router
     .route("/")
     .get(getProjects)
-    .post(createProjectValidator(), validate, createProject)
+    .post(createProjectValidator(), validate, createProject);
 
 router
     .route("/:projectId")
@@ -35,12 +37,9 @@ router
         validateProjectPermission([UserRolesEnum.ADMIN]),
         createProjectValidator(),
         validate,
-        updateProject
+        updateProject,
     )
-    .delete(
-        validateProjectPermission([UserRolesEnum.ADMIN]),
-        deleteProject
-    );
+    .delete(validateProjectPermission([UserRolesEnum.ADMIN]), deleteProject);
 
 router
     .route("/:projectId/members")
@@ -49,20 +48,12 @@ router
         validateProjectPermission([UserRolesEnum.ADMIN]),
         addMemberToProjectValidator(),
         validate,
-        addMembersToProject
-    )
+        addMembersToProject,
+    );
 
 router
     .route("/:projectId/members/:userId")
-    .put(
-        validateProjectPermission([UserRolesEnum.ADMIN]),
-        updateMemberRole
-    )
-    .delete(
-        validateProjectPermission([UserRolesEnum.ADMIN]),
-        deleteMember
-    )
-updateMemberRole
-    
+    .put(validateProjectPermission([UserRolesEnum.ADMIN]), updateMemberRole)
+    .delete(validateProjectPermission([UserRolesEnum.ADMIN]), deleteMember);
 
 export default router;
