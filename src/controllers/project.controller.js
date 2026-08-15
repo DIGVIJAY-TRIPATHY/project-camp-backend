@@ -1,8 +1,8 @@
 import { User } from "../models/user.model.js";
 import { Project } from "../models/project.model.js";
 import { ProjectMember } from "../models/projectmember.model.js";
-import { ApiResponse } from "../utils/apiResponse.js";
-import { ApiError } from "../utils/apiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import mongoose from "mongoose";
 import { AvailableUserRole, UserRolesEnum } from "../utils/constants.js";
@@ -17,40 +17,39 @@ const getProjects = asyncHandler(async (req, res) => {
         {
             $lookup: {
                 from: "projects",
-                localfield: "projects",
+                localField: "project",
                 foreignField: "_id",
-                as: "projects",
+                as: "project",
                 pipeline: [
                     {
                         $lookup: {
                             from: "projectmembers",
                             localField: "_id",
-                            foreignField: "projects",
+                            foreignField: "project",
                             as: "projectmembers"
                         }
                     },
                     {
                         $addFields: {
-                            $size: "$projectmembers"
+                            members: { $size: "$projectmembers" }
                         }
                     }
                 ]
             }
         },
         {
-            $unwind: "project"
+            $unwind: "$project"
         },
         {
             $project: {
-                _id: 1,
-                name: 1,
-                description: 1,
-                members: 1,
-                createdAt: 1,
-                createdBy: 1
-            },
-            role: 1,
-            _id: 0,
+                _id: "$project._id",
+                name: "$project.name",
+                description: "$project.description",
+                members: "$project.members",
+                createdAt: "$project.createdAt",
+                createdBy: "$project.createdBy",
+                role: 1,
+            }
         }
     ])
 
@@ -97,7 +96,7 @@ const createProject = asyncHandler(async (req, res) => {
 
     await ProjectMember.create({
         user: new mongoose.Types.ObjectId(req.user._id),
-        Project: new mongoose.Types.ObjectId(project._id),
+        project: new mongoose.Types.ObjectId(project._id),
         role: UserRolesEnum.ADMIN
     })
 
@@ -105,7 +104,7 @@ const createProject = asyncHandler(async (req, res) => {
         .status(201)
         .json(
             new ApiResponse(
-                200,
+                201,
                 project,
                 "Project created successfully"
             )
@@ -173,7 +172,7 @@ const addMembersToProject = asyncHandler(async (req, res) => {
         throw new ApiError(404, "User not found")
     }
 
-    await ProjectMember.findByIdAndUpdate(
+    await ProjectMember.findOneAndUpdate(
         {
             user: new mongoose.Types.ObjectId(user._id),
             project: new mongoose.Types.ObjectId(projectId)
@@ -202,7 +201,7 @@ const addMembersToProject = asyncHandler(async (req, res) => {
 
 const getProjectMembers = asyncHandler(async (req, res) => {
     const {projectId} = req.params
-    const project = await Project.findById(req.params)
+    const project = await Project.findById(projectId)
 
     if(!project){
         throw new ApiError(404, "Project not found")
@@ -226,7 +225,7 @@ const getProjectMembers = asyncHandler(async (req, res) => {
                             username: 1,
                             email: 1,
                             avatar: 1,
-                            fullname: 1,
+                            fullName: 1,
                             _id: 1
                         }
                     }
@@ -236,7 +235,7 @@ const getProjectMembers = asyncHandler(async (req, res) => {
         {
             $addFields: {
                 user: {
-                    $arrayElementAt: ["$user", 0]
+                    $arrayElemAt: ["$user", 0]
                 }
             }
         },
@@ -279,7 +278,7 @@ const updateMemberRole = asyncHandler(async (req, res) => {
         throw new ApiError(400, "project member not found")
     }
 
-    projectMember = await projectMember.findByIdAndUpdate(
+    projectMember = await ProjectMember.findByIdAndUpdate(
         projectMember._id,
         {
             role: newRole
@@ -317,7 +316,7 @@ const deleteMember = asyncHandler(async (req, res) => {
         throw new ApiError(400, "project member not found")
     }
 
-    projectMember = await projectMember.findByIdAndDelete(ProjectMember._id)
+    projectMember = await ProjectMember.findByIdAndDelete(projectMember._id)
 
     if(!projectMember){
         throw new ApiError(400, "project member not found")

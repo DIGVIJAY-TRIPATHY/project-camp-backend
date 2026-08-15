@@ -1,6 +1,6 @@
 import { User } from "../models/user.model.js";
-import { ApiResponse } from "../utils/apiResponse.js";
-import { ApiError } from "../utils/apiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { emailVerificationMailgenContent, forgotPasswordMailgenContent, sendEmail } from "../utils/mail.js";
 import jwt from "jsonwebtoken";
@@ -68,8 +68,8 @@ const registerUser = asyncHandler(async (req, res) => {
         .json(
             new ApiResponse(
                 201,
-                "User registered successfully. Please check your email to verify your account.",
                 createdUser,
+                "User registered successfully. Please check your email to verify your account.",
             ),
         );
 });
@@ -243,7 +243,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     try {
         const decodedToken = jwt.verify(
             incomingRefreshToken,
-            process.env.JWT_REFRESH_SECRET,
+            process.env.REFRESH_TOKEN_SECRET,
         );
 
         const user = await User.findById(decodedToken?._id);
@@ -336,7 +336,7 @@ const resetForgotPassword = asyncHandler(async (req, res) => {
     });
 
     if(!user) {
-        throw new ApiError(489, "Invalid or expired reset password token");
+        throw new ApiError(400, "Invalid or expired reset password token");
     }
 
     user.forgotPasswordExpiry = undefined
@@ -369,7 +369,7 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
     }
 
     user.password = newPassword
-    user.save({validateBeforeSave:false})
+    await user.save({validateBeforeSave:false})
 
     return res
         .status(200)
