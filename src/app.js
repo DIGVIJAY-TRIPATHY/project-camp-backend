@@ -20,6 +20,7 @@ app.use(
 app.use(express.static("public"));
 app.use(cookieParser());
 
+
 app.use(
     cors({
         origin: process.env.CORS_ORIGIN?.split(",") || "http://localhost:5173",
@@ -33,18 +34,17 @@ import healthcheckRouter from "./routes/healthcheck.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import projectRouter from "./routes/project.routes.js";
 import taskRouter from "./routes/task.routes.js";
-import { errorHandler } from "./middlewares/error.middleware.js";
+import noteRouter from "./routes/note.routes.js";
 
 
 app.use("/api/v1/healthcheck",healthcheckRouter)
 app.use("/api/v1/auth",authRouter)
 app.use("/api/v1/projects",projectRouter)
 app.use("/api/v1/tasks",taskRouter)
+app.use("/api/v1/notes",noteRouter)
 
 app.get("/", (req, res) => {
     res.send("hello");
 });
-
-app.use(errorHandler)
 
 export default app;

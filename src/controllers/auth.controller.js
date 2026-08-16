@@ -233,8 +233,10 @@ const resendEmailVerification = asyncHandler(async (req, res) => {
 });
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
+    // Body is checked first for the same reason as verifyJWT above: an
+    // explicitly-sent per-tab refresh token should win over a shared cookie.
     const incomingRefreshToken =
-        req.cookies.refreshToken || req.body.refreshToken;
+        req.body.refreshToken || req.cookies.refreshToken;
 
     if (!incomingRefreshToken) {
         throw new ApiError(400, "Refresh token is required");
