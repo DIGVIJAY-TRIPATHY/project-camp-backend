@@ -43,7 +43,7 @@ router
     .route("/:projectId/t/:taskId")
     .get(validateProjectPermission(AvailableUserRole), getTaskById)
     .put(
-        validateProjectPermission([UserRolesEnum.ADMIN, UserRolesEnum.PROJECT_ADMIN]),
+        validateProjectPermission(AvailableUserRole),
         upload.array("attachments", 10),
         updateTaskValidator(),
         validate,

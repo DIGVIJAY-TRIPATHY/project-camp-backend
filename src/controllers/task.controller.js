@@ -106,7 +106,7 @@ const getTaskById = asyncHandler(async (req, res) => {
                 from: "subtasks",
                 localField: "_id",
                 foreignField: "task",
-                as: "subtask",
+                as: "subtasks",
                 pipeline: [
                     {
                         $lookup: {
@@ -171,6 +171,36 @@ const updateTask = asyncHandler(async (req, res) => {
 
     if (!existingTask) {
         throw new ApiError(404, "Task not found");
+    }
+
+    // req.user.role is set by validateProjectPermission based on this
+    // user's role on this specific project.
+    const role = req.user.role;
+    const isManager = role === "admin" || role === "project_admin";
+    const isAssignee =
+        existingTask.assignedTo &&
+        existingTask.assignedTo.toString() === req.user._id.toString();
+
+    if (!isManager && !isAssignee) {
+        throw new ApiError(
+            403,
+            "You don't have permission to update this task",
+        );
+    }
+
+    // A plain member who is the assignee can only move the task's status —
+    // they can't rename it, reassign it, or add attachments through this
+    // endpoint. Managers can change anything.
+    if (!isManager) {
+        const task = await Task.findByIdAndUpdate(
+            taskId,
+            { status: status ?? existingTask.status },
+            { new: true },
+        );
+
+        return res
+            .status(200)
+            .json(new ApiResponse(200, task, "Task status updated successfully"));
     }
 
     const files = req.files || [];
